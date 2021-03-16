@@ -15,5 +15,6 @@ s.vendored_libraries = 'frameworks/libOpenInstallSDK.a'
 s.source_files = 'Classes/**/*.{h,m}'
 
 s.platform              = :ios, '8.0'
+s.pod_target_xcconfig   = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
 
 end

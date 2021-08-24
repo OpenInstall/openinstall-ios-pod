@@ -196,5 +196,16 @@
  */
 -(void)reportEffectPoint:(NSString *_Nonnull)effectID effectValue:(long)effectValue;
 
+
+/**
+ * 上报广告相关参数
+ *
+ * e.g.ASA相关token等
+ *
+ * @param attribution 广告相关参数配置
+ */
+-(void)reportAdsAttribution:(NSDictionary *)attribution;
+
+
 @end
 

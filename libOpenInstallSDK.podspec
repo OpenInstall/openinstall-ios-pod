@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name                  = "libOpenInstallSDK"
-s.version               = '2.5.4'
+s.version               = '2.5.4.1'
 s.summary               = "openinstall's officially supported iOS SDK"
 s.description           = <<-DESC
     openinstall's officially supported iOS SDK for pod.

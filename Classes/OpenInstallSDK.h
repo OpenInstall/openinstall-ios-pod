@@ -202,12 +202,26 @@
  * 渠道效果统计
  *
  * 目前SDK采用定时上报策略，时间间隔由服务器控制
- * e.g.可统计用户支付消费情况,点击次数等
+ * e.g.可统计用户支付消费情况，点击次数等
  *
  * @param effectID 效果点ID
  * @param effectValue 效果点值（如果是人民币金额，请以分为计量单位）
  */
 -(void)reportEffectPoint:(NSString *_Nonnull)effectID effectValue:(long)effectValue;
+
+
+#pragma mark - added in v2.6.0
+/**
+ * 渠道效果统计，效果明细上报
+ *
+ * 目前SDK采用定时上报策略，时间间隔由服务器控制
+ * e.g.可统计用户支付消费情况，点击次数，以及效果明细等
+ *
+ * @param effectID 效果点ID
+ * @param effectValue 效果点值（如果是人民币金额，请以分为计量单位）
+ * @param effectDictionary 效果点明细，key和value都要传入字符串格式
+ */
+-(void)reportEffectPoint:(NSString *_Nonnull)effectID effectValue:(long)effectValue effectDictionary:(NSDictionary*_Nonnull)effectDictionary;
 
 
 /**

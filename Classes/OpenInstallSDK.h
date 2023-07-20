@@ -222,7 +222,6 @@
 -(void)reportEffectPoint:(NSString *_Nonnull)effectID effectValue:(long)effectValue effectDictionary:(NSDictionary*_Nonnull)effectDictionary;
 
 
-
 #pragma mark - added in v2.7.0
 /**
  * 分享上报
@@ -234,6 +233,15 @@
 -(void)reportShareParametersWithShareCode:(NSString *_Nonnull)shareCode
                            sharePlatform:(OP_SharePlatform _Nullable)sharePlatform
                                completed:(void (^_Nullable)(NSInteger code,NSString *_Nullable msg))completedBlock;
+
+
+#pragma mark - added in v2.8.0
+/**
+ *  获取opid
+ *  初始化后调用，非异步，须真机
+ *  也可以在`getInstallParmsCompleted`方法回调里调用，等待初始化完成后返回opid
+ */
+- (NSString *_Nullable)getOpId;
 
 @end
 

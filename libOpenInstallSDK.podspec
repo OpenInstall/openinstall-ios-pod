@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name                  = "libOpenInstallSDK"
-s.version               = '2.8.2'
+s.version               = '2.8.3'
 s.summary               = "openinstall's officially supported iOS SDK"
 s.description           = <<-DESC
     openinstall's officially supported iOS SDK for pod.
@@ -12,7 +12,7 @@ s.author                = { "Cooper" => "appopeninstall@gmail.com"}
 s.source                = { :git => "https://github.com/OpenInstall/openinstall-ios-pod.git", :tag => s.version.to_s }
 
 s.vendored_libraries = 'frameworks/libOpenInstallSDK.a'
-s.source_files = 'Classes/**/*.{h,m}'
+s.source_files = 'Classes/**/*.{h,m,xcprivacy}'
 
 s.platform              = :ios, '8.0'
 s.pod_target_xcconfig   = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }

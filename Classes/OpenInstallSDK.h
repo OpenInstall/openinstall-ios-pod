@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OpeninstallData.h"
+#import "OpenInstallConfiguration.h"
 
 @protocol OpenInstallDelegate<NSObject>
 
@@ -53,6 +54,20 @@
  */
 + (NSString *_Nullable)sdkVersion;
 
+#pragma mark - add in v3.1.0
+
+/**
+ * 设置 SDK 调试日志开关
+ *
+ * @param enabled YES 开启调试日志，NO 关闭调试日志
+ * @discussion
+ * 1. 控制 SDK 内部 Debug / Info / Warning 级别日志的输出；Error 级别日志不受此开关影响，始终输出
+ * 2. 默认行为：Debug 编译包默认开启，Release 编译包默认关闭
+ * 3. 建议在调用初始化方法（如 initWithDelegate:）之前设置，便于排查集成与归因问题
+ * 4. 正式发布版本请保持关闭（NO），避免在控制台输出过多调试信息
+ */
++(void)setDebug:(BOOL)enabled;
+
 
 /**
  * SDK单例,returns a previously instantiated singleton instance of the API.
@@ -77,6 +92,19 @@
  */
 +(void)initWithDelegate:(id<OpenInstallDelegate> _Nonnull)delegate;
 
+/**
+ * 初始化 OpenInstall SDK，并传入隐私及归因配置。
+ *
+ * 3.1.0 新增，推荐使用；需要传入隐私与归因配置时优先使用该接口，
+ * 无需额外配置时使用 initWithDelegate:。其余初始化接口仅为兼容旧版保留。
+ *
+ * @param delegate 委托方法所在的类的对象
+ * @param configuration 隐私开关及宿主主动传入的 IDFA、ASA、CAID 参数；传入 nil 时使用默认配置
+ * @discussion 配置应在初始化时传入。隐私开关默认开启，以保持历史行为。
+ */
++ (void)initWithDelegate:(nullable id<OpenInstallDelegate>)delegate
+           configuration:(nullable OpenInstallConfiguration *)configuration;
+
 
 #pragma mark - added in v2.4.0
 /**
@@ -86,9 +114,9 @@
  * @param adid 广告标识符，需用户自己获取并传入，默认为空，传入nil则与初始化方法 initwithDelegate: 一致
  * @param delegate 委托方法所在的类的对象
  * @discussion 1、只有需要使用“广告平台渠道”进行广告效果监测的用户才需调用，2、需开启后台开关，位置："iOS集成"->"iOS应用配置"->"广告平台对接"
- * ***详细文档请查看：https://www.openinstall.io/doc/ad_ios.html***
+ * ***详细文档请查看：https://www.openinstall.com/doc/adPlatform.html***
  */
-+ (void)initWithDelegate:(nullable id<OpenInstallDelegate>)delegate advertisingId:(NSString *_Nullable)adid;
++ (void)initWithDelegate:(nullable id<OpenInstallDelegate>)delegate advertisingId:(NSString *_Nullable)adid __deprecated_msg("3.1.0 起推荐使用 initWithDelegate:configuration:，请通过 OpenInstallConfiguration.idfa 传入 IDFA");
 
 
 #pragma mark - added in v2.5.4
@@ -99,9 +127,10 @@
  *
  * @param delegate 委托方法所在的类的对象
  * @param attribution 广告相关参数，如ASA token，idfa等，@{OP_ASA_Token:@"your ASA Token"}
- * 参考文档 https://www.openinstall.io/doc/asa.html
+ * 参考文档 https://www.openinstall.com/doc/asa.html
  */
-+ (void)initWithDelegate:(nullable id<OpenInstallDelegate>)delegate adsAttribution:(NSDictionary *_Nullable)attribution;
++ (void)initWithDelegate:(nullable id<OpenInstallDelegate>)delegate
+          adsAttribution:(NSDictionary *_Nullable)attribution __deprecated_msg("3.1.0 起推荐使用 initWithDelegate:configuration:，请通过 OpenInstallConfiguration 传入 ASA、IDFA 等归因参数");
 
 
 #pragma mark - Deprecated in v2.2.0（已废弃）
@@ -113,7 +142,7 @@
  * @param delegate 委托方法(getWakeUpParams)所在的类的对象
  * @discussion 老版本sdk升级过来可延用该api
  */
-+(void)setAppKey:(nonnull NSString *)appKey withDelegate:(nullable id<OpenInstallDelegate>)delegate __deprecated_msg("Deprecated in v2.2.0，请参考方法<code>initwithDelegate</code>");
++(void)setAppKey:(nonnull NSString *)appKey withDelegate:(nullable id<OpenInstallDelegate>)delegate __deprecated_msg("Deprecated in v2.2.0，请使用 initWithDelegate:（3.1.0 起推荐）");
 
 
 ///----------------------
@@ -132,7 +161,7 @@
  2、该方法默认超时长一般为8~15秒不同版本会有浮动，使用了ASA则会在30秒左右，尽量写在业务场景需要参数的位置调用（在业务场景时，网络一般都是畅通的），例如，可以选择在用户注册成功后调用该方法获取参数，对用户进行奖励。原因是iOS首次安装、首次启动的app，会询问用户获取网络权限，用户允许后SDK才能正常联网去获取参数。如果调用过早，可能导致网络权限还未允许就被调用，导致参数无法及时拿到，误以为参数不存在（此时getInstallParmsCompleted法已超时，回调返回空）；
  3. 如果是业务需要，必须在application:didFinishLaunchingWithOptions方法中获取参数，可调用下面高级API，修改超时时长，比如30秒或更长。
  
- * ***该方法可重复获取参数，如需在首次安装才获取安装参数，请自行判断，参考https://www.openinstall.io/doc/ios_sdk_faq.html***
+ * ***该方法可重复获取参数，如需在首次安装才获取安装参数，请自行判断，参考https://www.openinstall.com/doc/ios_sdk_faq.html***
  */
 -(void)getInstallParmsCompleted:(void (^_Nullable)(OpeninstallData*_Nullable appData))completedBlock;
 
@@ -145,7 +174,7 @@
  *
  * @discussion
  * ***开发者不要自行保存参数!!!如果获取动态参数成功，SDK会把参数保存在本地***
- * ***该方法可重复获取参数，如需在首次安装才获取安装参数，请自行判断，参考https://www.openinstall.io/doc/ios_sdk_faq.html***
+ * ***该方法可重复获取参数，如需在首次安装才获取安装参数，请自行判断，参考https://www.openinstall.com/doc/ios_sdk_faq.html***
  */
 -(void)getInstallParmsWithTimeoutInterval:(NSTimeInterval)timeoutInterval
                                 completed:(void (^_Nullable)(OpeninstallData*_Nullable appData))completedBlock;
@@ -244,4 +273,3 @@
 - (NSString *_Nullable)getOpId;
 
 @end
-

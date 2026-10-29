@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
 s.name                  = "libOpenInstallSDK"
-s.version               = '3.0.0'
+s.version               = '3.1.0'
 s.summary               = "openinstall's officially supported iOS SDK"
 s.description           = <<-DESC
     openinstall's officially supported iOS SDK for pod.
 DESC
 
-s.homepage              = "https://www.openinstall.io"
+s.homepage              = "https://www.openinstall.com"
 s.license               = 'MIT'
 s.author                = { "David" => "david111@openinstall.com"}
 s.source                = { :git => "https://github.com/OpenInstall/openinstall-ios-pod.git", :tag => s.version.to_s }

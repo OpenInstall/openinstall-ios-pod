@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name                  = "libOpenInstallSDK"
-s.version               = '3.1.0'
+s.version               = '3.1.1'
 s.summary               = "openinstall's officially supported iOS SDK"
 s.description           = <<-DESC
     openinstall's officially supported iOS SDK for pod.
@@ -15,7 +15,7 @@ s.vendored_libraries = 'frameworks/libOpenInstallSDK.a'
 s.source_files = 'Classes/*.{h,m}'
 #s.resource_bundle = {'OPPrivacy' => ['Classes/PrivacyInfo.xcprivacy']}
 
-s.platform              = :ios, '12.0'
+s.platform              = :ios, '9.0'
 s.pod_target_xcconfig   = {'VALID_ARCHS' => 'x86_64 armv7 arm64'}
 
 end
